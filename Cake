@@ -1,0 +1,130 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+class Prajitura {
+	const int cod;//odata initializat el nu se mai modifica
+	string denumire;
+	float gramaj;
+	int nrIngredi;
+	string* ingrediente;
+
+	static int gramajMinim;//are o singura copi
+
+public :
+	Prajitura() :cod(1122){
+		
+		this->denumire = "Negresa";
+		this->gramaj = 180;
+		//pas 1: dim
+		this->nrIngredi = 4;
+		//pas 2: aloc mem
+		this->ingrediente = new string[nrIngredi];
+		//pas 3: for
+		this->ingrediente[0] = "faina";
+		this->ingrediente[1] = "ou";
+		this->ingrediente[2] = "lapte";
+		this->ingrediente[3] = "cacao";
+	}
+
+	Prajitura(const int cod, string denumire, float gramaj, int nrIngredi, string* ingrediente):cod(cod) {
+		this->denumire = denumire;
+		this->gramaj = gramaj;
+		this->nrIngredi = nrIngredi;
+		this->ingrediente = new string[nrIngredi];
+		for (int i = 0; i < nrIngredi; i++) {
+			this->ingrediente[i] = ingrediente[i];
+		}
+	}
+
+	Prajitura(const Prajitura& p):cod(p.cod) {
+		this->denumire = p.denumire;
+		this->gramaj = p.gramaj;
+		this->nrIngredi = p.nrIngredi;
+		this->ingrediente = new string[p.nrIngredi];
+		for (int i = 0; i < p.nrIngredi; i++) {
+			this->ingrediente[i] = p.ingrediente[i];
+		}
+	}
+
+	Prajitura& operator=(const Prajitura& p) {
+		//pas 1 - dezaloam ce este dinamic
+		if (this->ingrediente) {
+			delete[] this->ingrediente;
+		}
+		//pas 2 reconstruiesc ob 
+		this->denumire = p.denumire;
+		this->gramaj = p.gramaj;
+		this->nrIngredi = p.nrIngredi;
+		this->ingrediente = new string[p.nrIngredi];
+		for (int i = 0; i < p.nrIngredi; i++) {
+			this->ingrediente[i] = p.ingrediente[i];
+		}
+		//return 
+		return *this;
+	}
+
+	friend ostream& operator<<(ostream& out, Prajitura& p) {
+		out << p.cod << endl;
+		out << p.denumire << endl;
+		out << p.gramaj << endl;
+		out << p.nrIngredi << endl;
+		for (int i = 0; i < p.nrIngredi; i++) {
+			out << p.ingrediente[i] << endl;
+		}
+		return out;
+
+	}
+
+	//get si set -> metode de acces la atr private
+	//get ofera acces la vizualizare sau folosire
+	//set permitte modificarea unui atr
+	string getDenumire() {
+		return denumire;
+	}
+	float getGramaj() {
+		return gramaj;
+	}
+	int getNrIngrediente() {
+		return nrIngredi;
+	}
+	//pt string*, int*, float*
+	string* getIngrediente() {
+		return ingrediente;//adresa 
+	}
+
+	string getIngredient(int pozitie) {
+		if (pozitie >= 0 && pozitie < nrIngredi && ingrediente != NULL) {
+			return ingrediente[pozitie];
+		}
+	}
+
+
+
+
+};
+
+int Prajitura::gramajMinim = 150;
+
+void main() {
+	Prajitura p;
+	cout << p << endl;
+
+	Prajitura p1(1477, "rafaelo", 170, 3, new string[3]{ "boboane","lapte ","unt" });
+	cout << p1 << endl;
+
+	Prajitura p2(p1);
+	cout << p2 << endl;
+
+	p = p1;
+	cout << p << endl;
+
+	cout << p.getDenumire() << endl;
+	cout << p.getGramaj() << endl;
+	cout << p.getIngrediente() << endl;
+	cout << p.getIngredient(1) << endl;
+	cout << p.getIngredient(0) << endl;
+	cout << p.getIngredient(2) << endl;
+
+}
