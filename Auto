@@ -1,0 +1,199 @@
+//#define _CRT_SECURE_NO_WARNINGS
+//#include<iostream>
+//
+//using namespace std;
+//
+//class Auto {
+////atribute - caracteristici obiect 
+//	//public - vizibilitate peste tot 
+//	//protected - are vizibilitate public in mostenire si protected in restul codului
+//	//private - am vizibilitete doar in cadrul clasei 
+//	// bt deafult am domeniu private
+//	string culoare;
+//public:
+//	int pret;
+//	string nrInmatriculare;
+//protected:
+//	float capacitate;
+//private:
+//	char* serieMotor;//=NULL
+//
+//public:
+//
+//	//functie in clasa= metoda
+//
+//	//constructori= metode specifice clasei care se numesc precum clasa si nu au tip returnat
+//	//constr default/fara parametrii/implicit ->face obiecte la fel
+//	Auto() {
+//		culoare = "Alb";
+//		pret = 1000;
+//		nrInmatriculare="N/A";
+//		capacitate = 0.0;
+//		this->serieMotor = new char[strlen("na") + 1];
+//		strcpy(this->serieMotor, "na");
+//	}
+//	//constr cu parametrii -> imi face obiecte distincte
+//	Auto(string cul, int pret, string nrInmatriculare, float capacitate, const char* serieMotor) {
+//		culoare = cul;
+//		this->pret = pret;
+//		this->nrInmatriculare = nrInmatriculare;
+//		this->capacitate = capacitate;
+//		this->serieMotor = new char[strlen(serieMotor) + 1];
+//		strcpy(this->serieMotor, serieMotor);
+//
+//	}
+//
+//	//constructorul de copiere  - face un obiect nou dupa altui obiect deja existent
+//	Auto(const Auto& a) {
+//		this->culoare = a.culoare;
+//		this->pret = a.pret;
+//		this->nrInmatriculare = a.nrInmatriculare;
+//		this->capacitate = a.capacitate;
+//		this->serieMotor = new char[strlen(a.serieMotor) + 1];
+//		strcpy(this->serieMotor, a.serieMotor);
+//	}
+//
+//	//se apeleaza automat la finanlu executiei programului
+//	~Auto() {
+//		if (this->serieMotor) {
+//			delete[] this->serieMotor;
+//		}
+//	}
+//
+//	//op= (de atribuire) ->modificarea unui obiect deja existent cu valori de la alt obiect deja existent
+//	Auto& operator=(const Auto& a) {
+//		//1 sterg ce era dinamic anterior -> corpul din destr
+//		if (this->serieMotor) {
+//			delete[] this->serieMotor;
+//		}
+//		//pas 2 : refac ce am ster + ce nu era dinamic -> corp din constr de copiere
+//		this->culoare = a.culoare;
+//		this->pret = a.pret;
+//		this->nrInmatriculare = a.nrInmatriculare;
+//		this->capacitate = a.capacitate;
+//		this->serieMotor = new char[strlen(a.serieMotor) + 1];
+//		strcpy(this->serieMotor, a.serieMotor);
+//
+//		//pas 3:return 
+//		return *this;
+//	}
+//
+//	void afisare() {
+//		cout << this->culoare << endl;
+//		cout << this->pret << endl;
+//		cout << this->nrInmatriculare << endl;
+//		cout << this->capacitate << endl;
+//		//if (this->serieMotor) {
+//			cout << this->serieMotor << endl;
+//		//}
+//	}
+//
+//	//op de afisare op<< - nu se supraincarca pt clasa AUTO ci pt ostream 
+//	friend ostream& operator<<(ostream& out,const Auto& a) {
+//		
+//			out << a.culoare << endl;
+//			out << a.pret << endl;
+//			out << a.nrInmatriculare << endl;
+//			out << a.capacitate << endl;
+//			out << a.serieMotor << endl;
+//
+//			return out;
+//		
+//	}
+//	//transmitere paraetru ob prim valoare
+//	void modificaObiect(Auto a) {
+//		cout << a << endl;
+//		a.pret = 200000;
+//	}
+//
+//};
+//
+////transmiterea parametrilor in functie
+////prin valoare int x
+//void modifica(int x) {
+//	x = 100;
+//	cout << "prin valoare: "<<x << endl;
+//}
+////prin referinta int& x
+//void modifica1(int& x) {
+//	x = 100;
+//	cout <<"prin referinta:"<< x << endl;
+//
+//}
+////prin pointer 
+//void modifica2(int* x) {
+//	*x = 100;
+//	cout << "prin pointer: "<<*x << endl;
+//}
+//
+//
+//
+////supraincarcare 
+//int suma(int x, int y) {
+//	return x + y;
+//}
+//double suma(int a, double b) {
+//	return a + b;
+//}
+//int suma(int x) {
+//	return x + x;
+//}
+//
+////nr parametrilor, tipul parametrilor, odinea parametrilor
+//void main() {
+//	Auto a;
+//
+//	//cout << a.culoare; nu am acces pt ca este privat
+//	cout << a.nrInmatriculare << endl;
+//	//cout << a.capacitate << endl; nu am acces protected
+//
+//	//int x = 1;
+//	//int* px = &x;
+//
+//	Auto* pa = &a;
+//	cout << pa->pret << endl;
+//
+//
+//	cout << a.pret << endl;
+//	a.afisare();
+//	cout << suma(2, 3.2) << endl;
+//	cout << suma(2) << endl;
+//	cout << endl;
+//	cout << a << endl;
+//
+//	//constr cu parametrii
+//
+//	char* serie1 = new char[strlen("XR1234") + 1];
+//	strcpy(serie1, "XR1234");
+//	Auto a1("Galben", 23000, "B108SSS", 2.2, serie1);
+//	Auto a2("Albastru ", 74000, "B108SSS", 2.2, "DB36524");
+//
+//	cout << a1 << endl;
+//	cout << a2 << endl;
+//
+//	//constr de copiere 
+//	Auto a3(a2);
+//	cout << a3 << endl;
+//	cout << a << endl;
+//	//op=
+//	a = a1;
+//	cout << a << endl;
+//
+//	//prin valoare int x
+//	int x = 10;
+//	modifica(x);
+//	cout << x << endl;
+//	a1.modificaObiect(a);
+//	cout << a << endl;
+//
+//	//prin referinta int& x
+//	int z = 10;
+//	modifica1(z);
+//	cout << z << endl;
+//
+//	//prin pointer 
+//	int w = 10;
+//	int* pw = &w;
+//	modifica2(&w);
+//	cout << w << endl;
+//}
