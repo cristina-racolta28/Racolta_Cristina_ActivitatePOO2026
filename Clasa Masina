@@ -1,0 +1,132 @@
+#include <iostream>
+using namespace std;
+
+class Masina {
+private:
+    static int nrMasini;     // atribut static: numarul de masini create
+    const int idMasina;      // ID unic pentru fiecare masina
+
+    int nrLocuri;            // numarul total de locuri din masina
+    int nrPersoane;          // persoane aflate in masina
+    int* varstePersoane;     // vector dinamic cu varstele persoanelor
+    float consum;            // atribut la alegere (consum carburant)
+
+public:
+    // ============ Constructor fara parametri ============
+    Masina() : idMasina(++nrMasini) {
+        nrLocuri = 0;
+        nrPersoane = 0;
+        varstePersoane = nullptr;
+        consum = 0.0f;
+    }
+
+    // ============ Constructor cu parametri ============
+    Masina(int locuri, int persoane, const int* varste, float consum)
+        : idMasina(++nrMasini), varstePersoane(nullptr)
+    {
+        // validari
+        if (locuri < 0) nrLocuri = 0;
+        else nrLocuri = locuri;
+
+        if (persoane < 0) nrPersoane = 0;
+        else if (persoane > nrLocuri) nrPersoane = nrLocuri;
+        else nrPersoane = persoane;
+
+        if (consum < 0) this->consum = 0.0f;
+        else this->consum = consum;
+
+        // alocare vector dinamic
+        if (nrPersoane > 0 && varste != nullptr) {
+            varstePersoane = new int[nrPersoane];
+            for (int i = 0; i < nrPersoane; i++)
+                varstePersoane[i] = varste[i];
+        }
+    }
+
+    // ============ Constructor de copiere ============
+    Masina(const Masina& other)
+        : idMasina(other.idMasina), varstePersoane(nullptr)
+    {
+        nrLocuri = other.nrLocuri;
+        nrPersoane = other.nrPersoane;
+        consum = other.consum;
+
+        if (other.varstePersoane != nullptr && other.nrPersoane > 0) {
+            varstePersoane = new int[other.nrPersoane];
+            for (int i = 0; i < other.nrPersoane; i++)
+                varstePersoane[i] = other.varstePersoane[i];
+        }
+    }
+
+    // ============ Destructor ============
+    ~Masina() {
+        if (varstePersoane != nullptr) {
+            delete[] varstePersoane;
+            varstePersoane = nullptr;
+        }
+    }
+
+    // ============ GETTERI ============
+    int getIdMasina() const { return idMasina; }
+    int getNrLocuri() const { return nrLocuri; }
+    int getNrPersoane() const { return nrPersoane; }
+    float getConsum() const { return consum; }
+    const int* getVarstePersoane() const { return varstePersoane; }
+
+    static int getNrMasini() { return nrMasini; }
+
+    // ============ SETTERI ============
+    void setNrLocuri(int l) {
+        if (l < 0) l = 0;
+        nrLocuri = l;
+        if (nrPersoane > nrLocuri) nrPersoane = nrLocuri;
+    }
+
+    void setNrPersoane(int p) {
+        if (p < 0) p = 0;
+        else if (p > nrLocuri) p = nrLocuri;
+
+        // reinitializam vectorul
+        if (varstePersoane != nullptr) {
+            delete[] varstePersoane;
+            varstePersoane = nullptr;
+        }
+
+        nrPersoane = p;
+
+        if (nrPersoane > 0) {
+            varstePersoane = new int[nrPersoane];
+            for (int i = 0; i < nrPersoane; i++)
+                varstePersoane[i] = 0;
+        }
+    }
+
+    void setConsum(float c) {
+        if (c < 0) c = 0;
+        consum = c;
+    }
+
+    void setVarstePersoane(int n, const int* varste) {
+        if (n < 0) n = 0;
+        if (n > nrLocuri) n = nrLocuri;
+
+        if (varstePersoane != nullptr) {
+            delete[] varstePersoane;
+            varstePersoane = nullptr;
+        }
+
+        nrPersoane = n;
+
+        if (n > 0 && varste != nullptr) {
+            varstePersoane = new int[n];
+            for (int i = 0; i < n; i++)
+                varstePersoane[i] = varste[i];
+        }
+    }
+
+    // ============ Functii globale friend ============
+    friend int totalPersoane(const Masina& m1, const Masina& m2);
+    friend float comparaConsum(const Masina& m1, const Masina& m2);
+};
+
+// initializare atri
